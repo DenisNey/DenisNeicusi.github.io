@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harta Interactivă a Europei</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #mapid {
+            height: 100vh;
+            width: 100%;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        
+        .leaflet-popup-content img {
+            width: 80px; 
+            height: auto; 
+        }
+    </style>
+</head>
+<body>
+    <div id="mapid"></div>
+    <div class="credits">Credits to Neicusi Denis</div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        
+        var map = L.map('mapid').setView([51.505, -0.09], 4);
+
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        
+        var countriesData = [
+            { name: 'Albania', capital: 'Tirana', coordinates: [41.3275, 19.8187], image: 'images/tirana.jpg', population: '800,000' },
+            { name: 'Andorra', capital: 'Andorra la Vella', coordinates: [42.5063, 1.5218], image: 'images/andorra.jpg', population: '22,000' },
+            { name: 'Austria', capital: 'Viena', coordinates: [48.2082, 16.3738], image: 'images/vienna.jpg', population: '1,900,000' },
+            { name: 'Belarus', capital: 'Minsk', coordinates: [53.9045, 27.5615], image: 'images/minsk.jpg', population: '2,020,000' },
+            { name: 'Belgia', capital: 'Bruxelles', coordinates: [50.8503, 4.3517], image: 'images/brussels.jpg', population: '1,200,000' },
+            { name: 'Bosnia și Herțegovina', capital: 'Sarajevo', coordinates: [43.8563, 18.4131], image: 'images/sarajevo.jpg', population: '275,000' },
+            { name: 'Bulgaria', capital: 'Sofia', coordinates: [42.6977, 23.3219], image: 'images/sofia.jpg', population: '1,260,000' },
+            { name: 'Cehia', capital: 'Praga', coordinates: [50.0755, 14.4378], image: 'images/prague.jpg', population: '1,330,000' },
+            { name: 'Croația', capital: 'Zagreb', coordinates: [45.8150, 15.9819], image: 'images/zagreb.jpg', population: '800,000' },
+            { name: 'Cipru', capital: 'Nicosia', coordinates: [35.1856, 33.3823], image: 'images/nicosia.jpg', population: '55,000' },
+            { name: 'Danemarca', capital: 'Copenhaga', coordinates: [55.6761, 12.5683], image: 'images/copenhagen.jpg', population: '790,000' },
+            { name: 'Estonia', capital: 'Tallinn', coordinates: [59.4370, 24.7536], image: 'images/tallinn.jpg', population: '440,000' },
+            { name: 'Finlanda', capital: 'Helsinki', coordinates: [60.1695, 24.9354], image: 'images/helsinki.jpg', population: '650,000' },
+            { name: 'Franța', capital: 'Paris', coordinates: [48.8566, 2.3522], image: 'images/paris.jpg', population: '2,200,000' },
+            { name: 'Germania', capital: 'Berlin', coordinates: [52.5200, 13.4050], image: 'images/berlin.jpg', population: '3,769,000' },
+            { name: 'Grecia', capital: 'Atena', coordinates: [37.9838, 23.7275], image: 'images/athens.jpg', population: '664,000' },
+            { name: 'Ungaria', capital: 'Budapesta', coordinates: [47.4979, 19.0402], image: 'images/budapest.jpg', population: '1,750,000' },
+            { name: 'Islanda', capital: 'Reykjavik', coordinates: [64.1466, -21.9426], image: 'images/reykjavik.jpg', population: '120,000' },
+            { name: 'Irlanda', capital: 'Dublin', coordinates: [53.3498, -6.2603], image: 'images/dublin.jpg', population: '1,400,000' },
+            { name: 'Italia', capital: 'Roma', coordinates: [41.9028, 12.4964], image: 'images/rome.jpg', population: '2,876,000' },
+            { name: 'Kosovo', capital: 'Priștina', coordinates: [42.6629, 21.1655], image: 'images/pristina.jpg', population: '210,000' },
+            { name: 'Letonia', capital: 'Riga', coordinates: [56.9496, 24.1052], image: 'images/riga.jpg', population: '632,000' },
+            { name: 'Liechtenstein', capital: 'Vaduz', coordinates: [47.1410, 9.5209], image: 'images/vaduz.jpg', population: '5,428' },
+            { name: 'Lituania', capital: 'Vilnius', coordinates: [54.6872, 25.2797], image: 'images/vilnius.jpg', population: '580,000' },
+            { name: 'Luxemburg', capital: 'Luxemburg', coordinates: [49.6116, 6.1319], image: 'images/luxembourg.jpg', population: '116,000' },
+            { name: 'Macedonia de Nord', capital: 'Skopje', coordinates: [41.9973, 21.4280], image: 'images/skopje.jpg', population: '506,000' },
+            { name: 'Malta', capital: 'Valletta', coordinates: [35.8989, 14.5146], image: 'images/valletta.jpg', population: '6,400' },
+            { name: 'Moldova', capital: 'Chișinău', coordinates: [47.0167, 28.8497], image: 'images/chisinau.jpg', population: '680,000' },
+            { name: 'Monaco', capital: 'Monaco', coordinates: [43.7384, 7.4246], image: 'images/monaco.jpg', population: '39,000' },
+            { name: 'Muntenegru', capital: 'Podgorica', coordinates: [42.4304, 19.2594], image: 'images/podgorica.jpg', population: '140,000' },
+            { name: 'Țările de Jos', capital: 'Amsterdam', coordinates: [52.3676, 4.9041], image: 'images/amsterdam.jpg', population: '821,000' },
+            { name: 'Norvegia', capital: 'Oslo', coordinates: [59.9139, 10.7522], image: 'images/oslo.jpg', population: '673,000' },
+            { name: 'Polonia', capital: 'Varșovia', coordinates: [52.2297, 21.0122], image: 'images/warsaw.jpg', population: '1,794,000' },
+            { name: 'Portugalia', capital: 'Lisabona', coordinates: [38.7223, -9.1393], image: 'images/lisbon.jpg', population: '505,000' },
+            { name: 'România', capital: 'București', coordinates: [44.4268, 26.1025], image: 'images/bucharest.jpg', population: '1,820,000' },
+            { name: 'Rusia', capital: 'Moscova', coordinates: [55.7558, 37.6176], image: 'images/moscow.jpg', population: '12,536,000' },
+            { name: 'San Marino', capital: 'San Marino', coordinates: [43.9424, 12.4578], image: 'images/san_marino.jpg', population: '4,044' },
+            { name: 'Serbia', capital: 'Belgrad', coordinates: [44.7866, 20.4489], image: 'images/belgrade.jpg', population: '1,180,000' },
+            { name: 'Slovacia', capital: 'Bratislava', coordinates: [48.1486, 17.1077], image: 'images/bratislava.jpg', population: '430,000' },
+            { name: 'Slovenia', capital: 'Ljubljana', coordinates: [46.0569, 14.5058], image: 'images/ljubljana.jpg', population: '295,000' },
+            { name: 'Spania', capital: 'Madrid', coordinates: [40.4168, -3.7038], image: 'images/madrid.jpg', population: '3,223,000' },
+            { name: 'Suedia', capital: 'Stockholm', coordinates: [59.3293, 18.0686], image: 'images/stockholm.jpg', population: '975,000' },
+            { name: 'Elveția', capital: 'Bern', coordinates: [46.9479, 7.4446], image: 'images/bern.jpg', population: '134,000' },
+            { name: 'Turcia', capital: 'Ankara', coordinates: [39.9334, 32.8597], image: 'images/ankara.jpg', population: '5,445,000' },
+            { name: 'Ucraina', capital: 'Kiev', coordinates: [50.4501, 30.5234], image: 'images/kiev.jpg', population: '2,814,000' },
+            { name: 'Regatul Unit', capital: 'Londra', coordinates: [51.5074, -0.1278], image: 'images/london.jpg', population: '8,982,000' },
+            { name: 'Vatican', capital: 'Vatican', coordinates: [41.9029, 12.4534], image: 'images/vatican_city.jpg', population: '800' }
+        ];
+
+        
+        countriesData.forEach(country => {
+            var marker = L.marker(country.coordinates).addTo(map);
+            marker.bindPopup('<h3>' + country.capital + ', ' + country.name + '</h3><img src="' + country.image + '" alt="' + country.capital + '"><p>Număr de locuitori: ' + country.population + '</p>').openPopup();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+.popup-image {
+    max-width: 200px; /* sau altă valoare dorită */
+    height: auto; /* menține proporțiile imaginii */
+}
